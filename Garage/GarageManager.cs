@@ -8,7 +8,7 @@ namespace GarageApplikation
         private ConsoleUI ui;
         private GarageHandler handler;
 
-       
+
         public GarageManager()
         {
             ui = new ConsoleUI();
@@ -22,7 +22,7 @@ namespace GarageApplikation
             bool success = true;
             do
             {
-                ui.CreateOrExisting();
+                ui.CreateOrExistingMenu();
                 int input = ui.AskForInteger();
                 switch (input)
                 {
@@ -44,7 +44,14 @@ namespace GarageApplikation
         }
         private void ExistingMainMenu()
         {
-            Seed();
+
+            Seed(); //ToDo: problemet är här 
+
+            ExistingMenuWithoutSeed();
+        }
+
+        private void ExistingMenuWithoutSeed()
+        {
             bool sucess = true;
             ui.ShowExistingMainMenu();
             do
@@ -54,21 +61,23 @@ namespace GarageApplikation
                 {
                     case 1:
                         GetVehiclesNumbers();
+                        ExistingWhatNext();
                         break;
                     case 2:
                         PrintAll();
+                        ExistingWhatNext();
                         break;
                     case 3:
-                        if (CheckGarageIsFull()) { ExistingMainMenu(); } 
+                        if (CheckGarageIsFull()) { ExistingMainMenu(); }
                         AddVehicle();
-                        AddAgain(); // ToDo: Change this
+                        ExistingWhatNext();
                         break;
                     case 4:
                         RemoveVehicle();
-                        RemoveAgain();
+                        ExistingWhatNext();
                         break;
                     case 5:
-                        FindExistingVehicle();
+                        ExistingFindVehicle();
                         break;
                     case 0:
                         Environment.Exit(0);
@@ -80,9 +89,124 @@ namespace GarageApplikation
                 }
             } while (!sucess);
         }
-        private void FindExistingVehicle() // todo : check here
-        {
 
+        private void CreateFindVehicle()
+        {
+            bool success = true;
+            ui.FindVehicleMenu();
+            do
+            {
+                int input = ui.AskForInteger();
+                switch (input)
+                {
+                    case 1:
+                        bool regNrExist = false;
+                        do
+                        {
+
+                            string regNr = ui.GetRegNr();
+                            try
+                            {
+                                var vehicleToFind = handler.FindVehicleByRegNr(regNr);
+                                if (regNr.Equals(regNr, StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    ui.Print($"The vehicle yo searched for is a {vehicleToFind.Color} {vehicleToFind.GetType().Name}, that has {vehicleToFind.NrOfWheels} wheels ");
+                                    regNrExist = true;
+                                    CreateMainMenu();
+                                }
+                            }
+                            catch (NullReferenceException)
+                            {
+                                ui.Print($"There is no vehicle in the garage that has this registration number: {regNr}. Please try again.");
+                                ui.Print("Press 1 to try again" +
+                                    "\n press 2 to go back ");
+                                int input1 = ui.AskForInteger();
+                                switch (input1)
+                                {
+                                    case 1:
+                                        regNrExist = false;
+                                        break;
+                                    case 2:
+                                        CreateMainMenu();
+                                        break;
+                                }
+                            }
+                        } while (!regNrExist);
+                        break;
+                    case 2: // NotSure: how to do it 
+                        FindVehiclesByProporties();
+                        break;
+                    default:
+                        success = false;
+                        ui.Print("Please enter a valid choice!");
+                        break;
+
+                }
+            } while (!success);
+        }
+
+        private void FindVehiclesByProporties()
+        {
+            throw new NotImplementedException(); // ToDo
+        }
+
+        private void ExistingFindVehicle()
+        {
+            bool success = true;
+            ui.FindVehicleMenu();
+            do
+            {
+                int input = ui.AskForInteger();
+                switch (input)
+                {
+                    case 1:
+                        bool regNrExist = false;
+                        do
+                        {
+
+                            string regNr = ui.GetRegNr();
+
+                            try
+                            {
+                                var vehicleToFind = handler.FindVehicleByRegNr(regNr);
+                                if (regNr.Equals(regNr, StringComparison.InvariantCultureIgnoreCase))
+                                {
+
+                                    ui.Print($"The vehicle yo searched for is a {vehicleToFind.Color} {vehicleToFind.GetType().Name}, that has {vehicleToFind.NrOfWheels} wheels ");
+                                    regNrExist = true;
+                                    ExistingMainMenu();
+                                }
+
+
+                            }
+                            catch (NullReferenceException)
+                            {
+                                ui.Print($"There is no vehicle in the garage that has this registration number: {regNr}. Please try again.");
+                                ui.Print("Press 1 to try again" +
+                                    "\n press 2 to go back ");
+                                int input1 = ui.AskForInteger();
+                                switch (input1)
+                                {
+                                    case 1:
+                                        regNrExist = false;
+                                        break;
+                                    case 2:
+                                        ExistingMainMenu();
+                                        break;
+                                }
+                            }
+                        } while (!regNrExist);
+                        break;
+                    case 2:
+
+                        break;
+                    default:
+                        success = false;
+                        ui.Print("Please enter a valid choice!");
+                        break;
+
+                }
+            } while (!success);
         }
         private void StartMenu()
         {
@@ -126,18 +250,22 @@ namespace GarageApplikation
                     case 1:
                         if (CheckGarageIsFull()) { CreateMainMenu(); }
                         AddVehicle();
-                        AddAgain();
+                        CreateWhatNext();
                         break;
                     case 2:
                         RemoveVehicle();
-                        RemoveAgain();
+                        CreateWhatNext();
                         break;
                     case 3:
                         GetNewVehiclesNumbers();
-
+                        CreateWhatNext();
                         break;
                     case 4:
                         PrintAll();
+                        CreateWhatNext();
+                        break;
+                    case 5:
+                        CreateFindVehicle();
                         break;
                     case 0:
                         Environment.Exit(0);
@@ -149,6 +277,79 @@ namespace GarageApplikation
                 }
             } while (!sucess);
         }
+
+        private void CreateWhatNext()
+        {
+            bool success = true;
+            do
+            {
+                ui.WhatNextMenu();
+                int input = ui.AskForInteger();
+                switch (input)
+                {
+                    case 1:
+                        if (CheckGarageIsFull()) { CreateWhatNext(); }
+                        AddVehicle();
+                        CreateWhatNext();
+                        break;
+                    case 2:
+                        RemoveVehicle();
+                        CreateWhatNext();
+                        break;
+                    case 3:
+                        CreateMainMenu();
+                        break;
+
+                    case 9:
+                        Console.Clear();
+                        Run();
+                        break;
+                    case 0:
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        ui.Print("Please enter a valid choice");
+                        success = false;
+                        break;
+                }
+            } while (!success);
+        }
+        private void ExistingWhatNext()
+        {
+            bool success = true;
+            do
+            {
+                ui.WhatNextMenu();
+                int input = ui.AskForInteger();
+                switch (input)
+                {
+                    case 1:
+                        if (CheckGarageIsFull()) { ExistingWhatNext(); }
+                        AddVehicle();
+                        ExistingWhatNext();
+                        break;
+                    case 2:
+                        RemoveVehicle();
+                        ExistingWhatNext();
+                        break;
+                    case 3:
+                        ExistingMenuWithoutSeed();
+                        break;
+
+                    case 9:
+                        Console.Clear();
+                        Run();
+                        break;
+                    case 0:
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        ui.Print("Please enter a valid choice");
+                        success = false;
+                        break;
+                }
+            } while (!success);
+        }
         private bool CheckGarageIsFull()
         {
             if (handler.GarageIsFull())
@@ -158,7 +359,7 @@ namespace GarageApplikation
             }
             else
             {
-            return false;
+                return false;
             }
         }
         private void RemoveVehicle()
@@ -215,61 +416,8 @@ namespace GarageApplikation
                 }
             } while (!success);
         }
-        private void AddAgain()
-        {
-            do
-            {
-                ui.AddAgainMenu();
-                int input = ui.AskForInteger();
-                switch (input)
-                {
-                    case 1:
-                        if (CheckGarageIsFull()) { AddAgain(); }
-                        AddVehicle();
-                        break;
-                    case 2:
-                        CreateMainMenu();
-                        break;
-                    case 3:
-                        Console.Clear();
-                        Run();
-                        break;
-                    case 0:
-                        Environment.Exit(0);
-                        break;
-                    default:
-                        ui.Print("Please enter a valid choice");
-                        break;
-                }
-            } while (true);
-        }
-        private void RemoveAgain()
-        {
-            do
-            {
-                ui.RemoveAginMenu();
-                int input = ui.AskForInteger();
-                switch (input)
-                {
-                    case 1:
-                        RemoveVehicle();
-                        break;
-                    case 2:
-                        CreateMainMenu(); //ToDo: change this
-                        break;
-                    case 3:
-                        Console.Clear();
-                        Run();
-                        break;
-                    case 0:
-                        Environment.Exit(0);
-                        break;
-                    default:
-                        ui.Print("Please enter a valid choice");
-                        break;
-                }
-            } while (true);
-        }
+
+
         private Boat AddBoat()
         {
             string regNr = CheckRegNr();
@@ -326,7 +474,7 @@ namespace GarageApplikation
         }
         private void GetNewVehiclesNumbers()
         {
-            ui.Print(handler.GetNewVehiclesCount());
+            ui.Print(handler.GetVehiclesCount());
         }
         private void PrintAll()
         {
@@ -348,7 +496,9 @@ namespace GarageApplikation
 
         private void Seed()
         {
+            handler = new GarageHandler(10);
             handler.Seed();
         }
     }
 }
+// ToDo : Make the numbers of vehicles = count! 

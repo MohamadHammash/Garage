@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GarageApplikation
 {
-    public class ConsoleUI
+    public class ConsoleUI : IUI
     {
 
 
@@ -48,21 +48,21 @@ namespace GarageApplikation
                 "\n To Restart the application please press 9" +
                 "\n To close the application please press 0");
         }
-        public void AddAgainMenu()
+        public void FindVehicleMenu()
         {
-            Print("To add another vehicle please press 1" +
-                "\n To go back to the main menu please press 2" +
-                "\n To Restart the application please press 3" +
+            Print(" please press 1 to search for a vehicle using Registration number" +
+                "\n please press 2 to search for a vehicle using it's specifications ");
+        }
+        public void WhatNextMenu()
+        {
+            Print("What would you like to do next? " +
+                "\n To add a new vehicle please press 1" +
+                "\n To remove a vehicle please press 2" +
+                "\n To go back to the main menu please press 3" +
+                "\n To Restart the application please press 9" +
                 "\n To exit the application please press 0");
         }
-        public void RemoveAginMenu()
-        {
-            Print("To remove another vehicle please press 1" +
-                "\n To go back to the main menu please press 2" +
-                "\n To Restart the application please press 3" +
-                "\n To exit the application please press 0");
-        }
-        public void CreateOrExisting()
+        public void CreateOrExistingMenu()
         {
             Print("Would you like to create a garage or check the existing one?" +
                 "\n please press 1 to create a new garage" +

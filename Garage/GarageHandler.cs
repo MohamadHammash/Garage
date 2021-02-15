@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GarageApplikation
 {
-    class GarageHandler
+    class GarageHandler : IHandler
     {
         private Garage<Vehicle> garage;
         private ConsoleUI ui;
@@ -38,23 +38,22 @@ namespace GarageApplikation
         {
             return garage.ToList();
         }
-        public Vehicle RemoveVehicle(string regNr) // toDo: check if it's working
+        public Vehicle RemoveVehicle(string regNr) 
         {
             // var vehicleToRemove = garage.Where(v => v.RegNr == regNr).Select(v => regNr.(Equals(v.RegNr, StringComparison.InvariantCultureIgnoreCase)));
             var vehicleToRemove = garage.FirstOrDefault(v => regNr.Equals(v.RegNr, StringComparison.InvariantCultureIgnoreCase));
-            garage.ToList().Remove(vehicleToRemove);
-           
+            garage.Remove(vehicleToRemove);
             return vehicleToRemove;
         }
         internal string GetVehiclesCount()
         {
-            return $"The Garage has {GetVehicles().Count()} Vehicles";
+            return $"The Garage has {garage.Count()} Vehicles";
         }
         public Car CreateCar(string regNr, string color, int nrOfWheels, string fuelType)
         {
-                    var car = new Car(regNr, color, nrOfWheels, fuelType);
-                    garage.Add(car);
-                    return car;
+            var car = new Car(regNr, color, nrOfWheels, fuelType);
+            garage.Add(car);
+            return car;
         }
         public AirPlane CreateAirPlane(string regNr, string color, int nrOfWheels, int nrOfEngines)
         {
@@ -68,6 +67,13 @@ namespace GarageApplikation
             garage.Add(motorCycle);
             return motorCycle;
         }
+
+        internal Vehicle FindVehicleByRegNr(string regNr)
+        {
+            var vehicleToFind = garage.FirstOrDefault(v => regNr.Equals(v.RegNr, StringComparison.InvariantCultureIgnoreCase));
+            return vehicleToFind;
+        }
+
         public Bus CreateBus(string regNr, string color, int nrOfWheels, int nrOfSeats)
         {
             var bus = new Bus(regNr, color, nrOfWheels, nrOfSeats);
@@ -107,7 +113,7 @@ namespace GarageApplikation
 
         internal bool RegNrExists(string regNr)
         {
-             return garage.FirstOrDefault(v =>  regNr.Equals(v.RegNr, StringComparison.InvariantCultureIgnoreCase)) is null ? false : true;
+            return garage.FirstOrDefault(v => regNr.Equals(v.RegNr, StringComparison.InvariantCultureIgnoreCase)) is null ? false : true;
             #region CodeExplanation
 
             //Review: this does exactly like the code below:
@@ -128,9 +134,6 @@ namespace GarageApplikation
             garage.Count--; // NotSure
         }
 
-        internal string GetNewVehiclesCount()
-        {
-            return $"The Garage has {garage.Count()} Vehicles";
-        }
+      
     }
 }

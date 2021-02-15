@@ -9,6 +9,7 @@ namespace GarageApplikation
             var ui = new ConsoleUI();
             var manager = new GarageManager();
             manager.Run();
+
         }
     }
 }

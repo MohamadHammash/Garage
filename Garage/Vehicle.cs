@@ -2,7 +2,7 @@
 
 namespace GarageApplikation
 {
-    public class Vehicle
+    public class Vehicle : IVehicle
     {
         private string regNo;
         public string RegNr
@@ -14,7 +14,7 @@ namespace GarageApplikation
             set
             {
                 regNo = value;
-                
+
             }
         }
         public string Color { get; set; }
