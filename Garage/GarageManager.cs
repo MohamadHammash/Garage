@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GarageApplikation
 {
     internal class GarageManager
     {
-        private ConsoleUI ui;
-        private GarageHandler handler;
+        private IUI ui;
+        private IHandler handler;
 
 
         public GarageManager()
@@ -19,11 +20,12 @@ namespace GarageApplikation
         }
         private void CreateOrExisting()
         {
+            ui.CreateOrExistingMenu();
             bool success = true;
             do
             {
-                ui.CreateOrExistingMenu();
-                int input = ui.AskForInteger();
+
+                int input = ui.AskForInteger("");
                 switch (input)
                 {
                     case 1:
@@ -45,7 +47,7 @@ namespace GarageApplikation
         private void ExistingMainMenu()
         {
 
-            Seed(); //ToDo: problemet är här 
+            Seed();
 
             ExistingMenuWithoutSeed();
         }
@@ -56,7 +58,7 @@ namespace GarageApplikation
             ui.ShowExistingMainMenu();
             do
             {
-                int input = ui.AskForInteger();
+                int input = ui.AskForInteger("");
                 switch (input)
                 {
                     case 1:
@@ -96,7 +98,7 @@ namespace GarageApplikation
             ui.FindVehicleMenu();
             do
             {
-                int input = ui.AskForInteger();
+                int input = ui.AskForInteger("");
                 switch (input)
                 {
                     case 1:
@@ -104,7 +106,7 @@ namespace GarageApplikation
                         do
                         {
 
-                            string regNr = ui.GetRegNr();
+                            string regNr = ui.AskForString("Please enter the registration number of the vehicle!");
                             try
                             {
                                 var vehicleToFind = handler.FindVehicleByRegNr(regNr);
@@ -118,9 +120,10 @@ namespace GarageApplikation
                             catch (NullReferenceException)
                             {
                                 ui.Print($"There is no vehicle in the garage that has this registration number: {regNr}. Please try again.");
+
+                                int input1 = ui.AskForInteger($"There is no vehicle in the garage that has this registration number: {regNr}. Please try again.");
                                 ui.Print("Press 1 to try again" +
                                     "\n press 2 to go back ");
-                                int input1 = ui.AskForInteger();
                                 switch (input1)
                                 {
                                     case 1:
@@ -133,7 +136,7 @@ namespace GarageApplikation
                             }
                         } while (!regNrExist);
                         break;
-                    case 2: // NotSure: how to do it 
+                    case 2:
                         FindVehiclesByProporties();
                         break;
                     default:
@@ -147,8 +150,54 @@ namespace GarageApplikation
 
         private void FindVehiclesByProporties()
         {
-            throw new NotImplementedException(); // ToDo
+            /* ToDo:
+             *   Check if the user enters wrong inputs.
+             */
+
+            ui.Print("Please enter the color of the vehicles you would like to find!");
+            var color = ui.GetInput();
+            ui.Print("Please enter the number of wheels of the vehicles you would like to find!");
+            var NrOfWheels = ui.GetInput();
+            ui.Print("Please enter the type of the vehicle would like to find!");
+            var type = ui.GetInput();
+            IEnumerable<Vehicle> result = handler.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(color))
+            {
+                result = result.Where(v => v.Color.Equals(color, StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            if (!String.IsNullOrWhiteSpace(NrOfWheels) && int.TryParse(NrOfWheels, out int getWheelsNr))
+            {
+                result = result.Where(v => v.NrOfWheels == getWheelsNr);
+            }
+          
+
+            if (!String.IsNullOrWhiteSpace(type))
+                result = result.Where(v => v.GetType().Name.Equals(type, StringComparison.InvariantCultureIgnoreCase));
+
+            foreach (var itemAllVehicles in result)
+            {
+
+                if (itemAllVehicles != null)
+                {
+                    ui.Print($"A vehicle of type {itemAllVehicles.GetType().Name} with the register number: {itemAllVehicles.RegNr} that has a {itemAllVehicles.Color} color and {itemAllVehicles.NrOfWheels} wheels has been found");
+                }
+                else
+                {
+                    ui.Print("No vehicles found in these specifications!");
+                }
+            }
+
+
+
+
+
+
         }
+
+
+
 
         private void ExistingFindVehicle()
         {
@@ -156,7 +205,7 @@ namespace GarageApplikation
             ui.FindVehicleMenu();
             do
             {
-                int input = ui.AskForInteger();
+                int input = ui.AskForInteger("");
                 switch (input)
                 {
                     case 1:
@@ -164,7 +213,7 @@ namespace GarageApplikation
                         do
                         {
 
-                            string regNr = ui.GetRegNr();
+                            string regNr = ui.AskForString("Please enter the registration number of the vehicle!");
 
                             try
                             {
@@ -182,9 +231,9 @@ namespace GarageApplikation
                             catch (NullReferenceException)
                             {
                                 ui.Print($"There is no vehicle in the garage that has this registration number: {regNr}. Please try again.");
-                                ui.Print("Press 1 to try again" +
+
+                                int input1 = ui.AskForInteger("Press 1 to try again" +
                                     "\n press 2 to go back ");
-                                int input1 = ui.AskForInteger();
                                 switch (input1)
                                 {
                                     case 1:
@@ -198,7 +247,7 @@ namespace GarageApplikation
                         } while (!regNrExist);
                         break;
                     case 2:
-
+                        FindVehiclesByProporties();
                         break;
                     default:
                         success = false;
@@ -244,7 +293,7 @@ namespace GarageApplikation
             ui.ShowCreateMainMenu();
             do
             {
-                int input = ui.AskForInteger();
+                int input = ui.AskForInteger("");
                 switch (input)
                 {
                     case 1:
@@ -284,7 +333,7 @@ namespace GarageApplikation
             do
             {
                 ui.WhatNextMenu();
-                int input = ui.AskForInteger();
+                int input = ui.AskForInteger("");
                 switch (input)
                 {
                     case 1:
@@ -320,7 +369,7 @@ namespace GarageApplikation
             do
             {
                 ui.WhatNextMenu();
-                int input = ui.AskForInteger();
+                int input = ui.AskForInteger("");
                 switch (input)
                 {
                     case 1:
@@ -364,8 +413,8 @@ namespace GarageApplikation
         }
         private void RemoveVehicle()
         {
-            ui.Print("Please enter the Registration number of the Vehicle you would like to remove.");
-            var regNr = ui.AskForString();
+
+            var regNr = ui.AskForString("Please enter the Registration number of the Vehicle you would like to remove.");
             var vehicleToRemove = handler.RemoveVehicle(regNr);
             if (vehicleToRemove != null)
             {
@@ -383,7 +432,7 @@ namespace GarageApplikation
             ui.VehiclesMenu();
             do
             {
-                int input = ui.AskForInteger();
+                int input = ui.AskForInteger("");
 
                 switch (input)
                 {
@@ -421,41 +470,41 @@ namespace GarageApplikation
         private Boat AddBoat()
         {
             string regNr = CheckRegNr();
-            string color = ui.GetColor();
-            int nrOfWheels = ui.GetNrOfWheels();
+            string color = ui.AskForString("Please enter the color of the vehicle!");
+            int nrOfWheels = ui.AskForInteger("Please enter the number of wheels that the vehicle has!");
             double boatLength = ui.GetBoatLength();
             return handler.CreateBoat(regNr, color, nrOfWheels, boatLength);
         }
         private Bus AddBus()
         {
             string regNr = CheckRegNr();
-            string color = ui.GetColor();
-            int nrOfWheels = ui.GetNrOfWheels();
-            int nrOfSeats = ui.GetNrOfSeats();
+            string color = ui.AskForString("Please enter the color of the vehicle!");
+            int nrOfWheels = ui.AskForInteger("Please enter the number of wheels that the vehicle has!");
+            int nrOfSeats = ui.AskForInteger("Please enter the number of seats that the bus has!");
             return handler.CreateBus(regNr, color, nrOfWheels, nrOfSeats);
         }
         private MotorCycle AddMotorCycle()
         {
             string regNr = CheckRegNr();
-            string color = ui.GetColor();
-            int nrOfWheels = ui.GetNrOfWheels();
+            string color = ui.AskForString("Please enter the color of the vehicle!");
+            int nrOfWheels = ui.AskForInteger("Please enter the number of wheels that the vehicle has!");
             double cylinderVolume = ui.GetCylinderVolume();
             return handler.CreateMotorCycle(regNr, color, nrOfWheels, cylinderVolume);
         }
         private Car AddCar()
         {
             string regNr = CheckRegNr();
-            string color = ui.GetColor();
-            int nrOfWheels = ui.GetNrOfWheels();
-            string fuelType = ui.GetFuelType();
+            string color = ui.AskForString("Please enter the color of the vehicle!");
+            int nrOfWheels = ui.AskForInteger("Please enter the number of wheels that the vehicle has!");
+            string fuelType = ui.AskForString("Please enter the vehicle's fuel type!");
             return handler.CreateCar(regNr, color, nrOfWheels, fuelType);
         }
         private AirPlane AddAirPlane()
         {
             string regNr = CheckRegNr();
-            string color = ui.GetColor();
-            int nrOfWheels = ui.GetNrOfWheels();
-            int nrOfEngines = ui.GetNrOfEngines();
+            string color = ui.AskForString("Please enter the color of the vehicle!");
+            int nrOfWheels = ui.AskForInteger("Please enter the number of wheels that the vehicle has!");
+            int nrOfEngines = ui.AskForInteger("Please enter the airplane's number of engines!");
             return handler.CreateAirPlane(regNr, color, nrOfWheels, nrOfEngines);
         }
         private string CheckRegNr()
@@ -463,7 +512,7 @@ namespace GarageApplikation
             string regNr;
             do
             {
-                regNr = ui.GetRegNr();
+                regNr = ui.AskForString("Please enter the registration number of the vehicle!");
                 if (handler.RegNrExists(regNr)) { ui.Print("This vehicle already exists in the garage"); }
             } while (handler.RegNrExists(regNr));
             return regNr;
@@ -501,4 +550,3 @@ namespace GarageApplikation
         }
     }
 }
-// ToDo : Make the numbers of vehicles = count! 

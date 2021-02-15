@@ -12,7 +12,7 @@ namespace GarageApplikation.Tests
         [TestInitialize]
         public void TestInitializer()
         {
-            Garage garage = new Garage(10);
+           // var garage = new Garage<Vehicle>(10);
         }
         [TestMethod()]
         public void GarageTest()
@@ -39,7 +39,20 @@ namespace GarageApplikation.Tests
         [TestMethod()]
         public void AddTest()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveTest()
+        {
+
             Assert.Fail();
         }
     }
 }
+//ToDo : Create a test unit to test all methods in Garage class.

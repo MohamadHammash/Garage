@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace GarageApplikation
 {
-    class Garage<T> : IEnumerable<T> where T : Vehicle 
+   internal class Garage<T> : IEnumerable<T> where T : Vehicle 
     {
          private T[] vehicles;
         private int capacity;
@@ -40,7 +40,7 @@ namespace GarageApplikation
                 if (vehicles[i] is null)
                 {
                     vehicles[i] = vehicle;
-                    count++; //Done? miska när du plockar ut ett fordon! 
+                    count++; 
                     break;
                 }
             }
@@ -50,7 +50,7 @@ namespace GarageApplikation
             return GetEnumerator();
         }
 
-        internal void Remove(T vehicleToRemove)
+        public void Remove(T vehicleToRemove)
         {
             for (int i = 0; i < vehicles.Length; i++)
             {
@@ -62,11 +62,3 @@ namespace GarageApplikation
         }
     }
 }
-/* ToDo:
- * 1: Få in user input för färg och nr of wheels samt type.
- * 2: gör en lista med alla fordon i garaget.
- * 3: iterrera över listan och kolla om färgen matchar med var enda fordon och lägg den i en ny lista.
- * 4:  itterera över den nya listan och se om nr of wheels matchar lägg den i en ny lista.
- * 5: itterera över den nya listan och se om Type matchar.
- * 6: iterrera över den sista nr och printa ut den.
-*/

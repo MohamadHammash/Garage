@@ -3,20 +3,22 @@
     public interface IUI
     {
         double AskForDouble();
-        int AskForInteger();
-        string AskForString();
+        int AskForInteger(string message);
+        string AskForString(string message);
         void CreateOrExistingMenu();
         void FindVehicleMenu();
         double GetBoatLength();
-        string GetColor();
         double GetCylinderVolume();
-        string GetFuelType();
         string GetInput();
-        int GetNrOfEngines();
-        int GetNrOfSeats();
-        int GetNrOfWheels();
-        string GetRegNr();
+       
+       
+       
         void Print(string message);
+        void ShowCreateMainMenu();
+        void ShowExistingMainMenu();
+        void VehiclesMenu();
         void WhatNextMenu();
+        string FindVehiclesByProportiesMenu();
+        int GetIntInput();
     }
 }

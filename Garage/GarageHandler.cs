@@ -34,18 +34,18 @@ namespace GarageApplikation
                 (new MotorCycle("CT255", "Black and Red", 2, 3.2))
             };
         }
-        internal List<Vehicle> GetAll()
+        public List<Vehicle> GetAll()
         {
             return garage.ToList();
         }
-        public Vehicle RemoveVehicle(string regNr) 
+        public Vehicle RemoveVehicle(string regNr)
         {
             // var vehicleToRemove = garage.Where(v => v.RegNr == regNr).Select(v => regNr.(Equals(v.RegNr, StringComparison.InvariantCultureIgnoreCase)));
             var vehicleToRemove = garage.FirstOrDefault(v => regNr.Equals(v.RegNr, StringComparison.InvariantCultureIgnoreCase));
             garage.Remove(vehicleToRemove);
             return vehicleToRemove;
         }
-        internal string GetVehiclesCount()
+        public string GetVehiclesCount()
         {
             return $"The Garage has {garage.Count()} Vehicles";
         }
@@ -68,7 +68,7 @@ namespace GarageApplikation
             return motorCycle;
         }
 
-        internal Vehicle FindVehicleByRegNr(string regNr)
+        public Vehicle FindVehicleByRegNr(string regNr)
         {
             var vehicleToFind = garage.FirstOrDefault(v => regNr.Equals(v.RegNr, StringComparison.InvariantCultureIgnoreCase));
             return vehicleToFind;
@@ -86,7 +86,7 @@ namespace GarageApplikation
             garage.Add(boat);
             return boat;
         }
-        internal bool GarageIsFull()
+        public bool GarageIsFull()
         {
             //return garage.FirstOrDefault(v => v == null ) is null ? false : true; //NotSure
             return garage.IsFull;
@@ -111,7 +111,7 @@ namespace GarageApplikation
             //}
         }
 
-        internal bool RegNrExists(string regNr)
+        public bool RegNrExists(string regNr)
         {
             return garage.FirstOrDefault(v => regNr.Equals(v.RegNr, StringComparison.InvariantCultureIgnoreCase)) is null ? false : true;
             #region CodeExplanation
@@ -129,11 +129,13 @@ namespace GarageApplikation
             #endregion
         }
 
-        internal void Countdown()
+        public void Countdown()
         {
             garage.Count--; // NotSure
         }
 
       
+
+
     }
 }
