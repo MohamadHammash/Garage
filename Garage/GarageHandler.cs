@@ -129,10 +129,10 @@ namespace GarageApplikation
             #endregion
         }
 
-        public void Countdown()
-        {
-            garage.Count--; // NotSure
-        }
+        //public void Countdown()
+        //{
+        //    garage.Count--; // NotSure
+        //}
 
       
 

@@ -53,7 +53,7 @@ namespace GarageApplikation
 
         }
     }
-    class Car : Vehicle
+    public class Car : Vehicle // made public for the test
     {
         public string FuelType { get; set; }
         public Car(string regNr, string color, int nrOfWheels, string fuelType) : base(regNr, color, nrOfWheels)

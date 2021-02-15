@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace GarageApplikation
 {
-   internal class Garage<T> : IEnumerable<T> where T : Vehicle 
+   public class Garage<T> : IEnumerable<T> where T : Vehicle 
     {
          private T[] vehicles;
         private int capacity;
@@ -52,11 +52,13 @@ namespace GarageApplikation
 
         public void Remove(T vehicleToRemove)
         {
+
             for (int i = 0; i < vehicles.Length; i++)
             {
                 if(vehicles[i] == vehicleToRemove)
                 {
                     vehicles[i] = null;
+                    count--;
                 }
             }
         }

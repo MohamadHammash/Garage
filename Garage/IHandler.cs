@@ -4,7 +4,7 @@ namespace GarageApplikation
 {
     interface IHandler
     {
-        void Countdown();
+     //   void Countdown();
         AirPlane CreateAirPlane(string regNr, string color, int nrOfWheels, int nrOfEngines);
         Boat CreateBoat(string regNr, string color, int nrOfWheels, double boatLength);
         Bus CreateBus(string regNr, string color, int nrOfWheels, int nrOfSeats);

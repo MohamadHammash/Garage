@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GarageApplikation
 {
-    internal class GarageManager
+    public class GarageManager
     {
         private IUI ui;
         private IHandler handler;
@@ -271,7 +271,7 @@ namespace GarageApplikation
                     if (capacity <= 0)
                     {
                         sucess = false;
-                        ui.Print("The garage must have a capacity for at least 1 vehicle!");
+                        ui.Print("The garage must have a capacity for at least 1 vehicle! Please try again");
                     }
                     else
                     {
@@ -419,7 +419,7 @@ namespace GarageApplikation
             if (vehicleToRemove != null)
             {
                 ui.Print($"a vehicle of type {vehicleToRemove.GetType().Name} and Register number {vehicleToRemove.RegNr} has been removed");
-                handler.Countdown();
+               // handler.Countdown();
             }
             else
             {
@@ -491,7 +491,7 @@ namespace GarageApplikation
             double cylinderVolume = ui.GetCylinderVolume();
             return handler.CreateMotorCycle(regNr, color, nrOfWheels, cylinderVolume);
         }
-        private Car AddCar()
+        private Car AddCar() // made public for test
         {
             string regNr = CheckRegNr();
             string color = ui.AskForString("Please enter the color of the vehicle!");
